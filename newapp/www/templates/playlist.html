@@ -1,0 +1,31 @@
+<ion-view view-title="My Infomation">
+  <ion-content>
+    <div class="bar bar-header" style="background:#444;">
+	  <h1 class="title" style="color:#fff;">{{status}}</h1>
+	</div>
+	<br/><br/>
+	<div class="list">
+	  <label class="item item-input item-floating-label">
+		<span class="input-label">Employee Id</span>
+		<input id="empid" ng-model="empid" type="text" placeholder="Employee Id" name="empid">
+	  </label>
+	  <label class="item item-input item-floating-label">
+		<span class="input-label">Job Id</span>
+		<input id="jobid" ng-model="jobid" type="text" placeholder="Job Id" name="jobid">
+	  </label>
+	</div>
+	
+	
+	<div id="map" style="width:100%; height:200px; display:none;" ></div>
+	<button class="button button-block button-dark" ng-click="ClickImage()">
+	  Click A Selfie	
+	</button>
+	<div style="width:auto; height:200px;">
+		<img id="myImage" src="img/no-image.png" ng-model="image" style="width:auto; height:200px;" />
+	</div>
+	<button id="submit" class="button button-block button-dark" ng-click="SubmitData()">
+	  Submit
+	</button>
+	<div class="" id="msg"></div>
+  </ion-content>
+</ion-view>
