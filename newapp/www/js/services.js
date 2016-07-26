@@ -6,16 +6,15 @@ angular.module('starter.services', [])
 		savedata: savedata
 	});
 	
-	function savedata(employee_code, job_code, latitude, longitude, address, device, selfie_image){
-					
-		var request = $http.post("http://162.243.94.122/index.php",{
-                    employee_code: employee_code,
-                    job_code: job_code, 
-                    latitude: latitude,
-					longitude: longitude, 
-                    device: device,
-					selfie_image: selfie_image
+	function savedata(employee_code, job_code, latitude, longitude, address, device, selfie_image, notification_type){
+		data = 'data={"employee_code":"'+employee_code+'","job_code":"'+job_code+'","latitude":"'+latitude+'","longitude":"'+longitude+'","address":"'+address+'","device":"'+device+'","selfie_image":"'+selfie_image+'","notification_type":"'+notification_type+'"}';
+		/*var request = $http.post("http://162.243.94.122/index.php",{
+                    data: data
                 });
+		return( request.then( handleSuccess, handleError ) );
+		*/
+		var request = $http.post('http://162.243.94.122/index.php', data,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+
 		return( request.then( handleSuccess, handleError ) );
 	}
 	

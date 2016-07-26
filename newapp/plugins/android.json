@@ -4,51 +4,46 @@
         "uninstalled": []
     },
     "config_munge": {
-        "files": {
-            "res/xml/config.xml": {
-                "parents": {
-                    "/*": [
-                        {
-                            "xml": "<feature name=\"Accelerometer\"><param name=\"android-package\" value=\"org.apache.cordova.devicemotion.AccelListener\" /></feature>",
-                            "count": 1
-                        }
-                    ]
-                }
-            }
-        }
+        "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.ionicframework.newapp732625"
-        },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.ionicframework.newapp732625"
-        },
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.ionicframework.newapp732625"
-        },
-        "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.ionicframework.newapp732625"
-        },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.ionicframework.newapp732625"
-        },
-        "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "com.ionicframework.newapp732625"
-        },
         "cordova-plugin-camera": {
-            "PACKAGE_NAME": "com.ionicframework.newapp732625"
+            "PACKAGE_NAME": "com.ionicframework.newapp32113fe5"
         },
-        "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "com.ionicframework.newapp732625"
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.ionicframework.newapp32113fe5"
         },
         "cordova-plugin-device-motion": {
-            "PACKAGE_NAME": "com.ionicframework.newapp732625"
+            "PACKAGE_NAME": "com.ionicframework.newapp32113fe5"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.ionicframework.newapp32113fe5"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.ionicframework.newapp32113fe5"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.ionicframework.newapp32113fe5"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.ionicframework.newapp32113fe5"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.ionicframework.newapp32113fe5"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.ionicframework.newapp32113fe5"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.ionicframework.newapp32113fe5"
         }
     },
     "dependent_plugins": {
         "cordova-plugin-compat": {
-            "PACKAGE_NAME": "com.ionicframework.newapp732625"
+            "PACKAGE_NAME": "com.ionicframework.newapp32113fe5"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.ionicframework.newapp32113fe5"
         }
     }
 }

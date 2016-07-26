@@ -4,51 +4,38 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams, empdata) {
+.controller("PlaylistCtrl", ['$scope', '$stateParams', '$cordovaFileTransfer', '$cordovaDevice', '$ionicLoading', 'empdata', function ($scope, $stateParams, $cordovaFileTransfer, $cordovaDevice, $ionicLoading, empdata) {
 	$scope.status = $stateParams.playlistId;
 	var map = null;
 	var my_current_lat = null;
 	var my_current_lng = null;
+	var uuid = $cordovaDevice.getUUID();
+	var address = '';
+	var img = '';
+	var options = {};
+	
 	document.addEventListener("deviceready", function () {
+		 
 		navigator.geolocation.getCurrentPosition(function(pos) {
 		
-		my_current_lat = pos.coords.latitude;  //alert("lat="+my_current_lat);
-		my_current_lng = pos.coords.longitude; //alert("lng="+my_current_lng);
-		
-		var marker = new google.maps.Marker();
-		
-		my_static_latlng = new google.maps.LatLng(my_current_lat, my_current_lng);
-					
-		var mapOptions = {
-			center: my_static_latlng,
-			zoom: 12,
-			zoomControl: true,
-			  mapTypeControl: true,
-			  scaleControl: true,
-			  streetViewControl: false,
-			  rotateControl: false,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
-		};
- 
-		map = new google.maps.Map(document.getElementById("map"), mapOptions);  
-		addMarker(location, map);
+			my_current_lat = pos.coords.latitude;
+			my_current_lng = pos.coords.longitude;
 			
+			var geocoder = new google.maps.Geocoder();
+			var latlng = new google.maps.LatLng(my_current_lat, my_current_lng);
+			var request = {
+				latLng: latlng
+			};
+			geocoder.geocode(request, function(data, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+			  if (data[0] != null) {
+				address = data[0].formatted_address;
+			  } else {
+				address = '';
+			  }
+			}
+			})
 		});
-		
-		
-			  // Adds a marker to the map.
-		
-		function addMarker(location, map) {
-			var marker = new google.maps.Marker();
-			marker.setMap(null);          
-			marker = new google.maps.Marker({
-				position: location,
-				draggable: true,
-				zoom: 18,
-				animation: google.maps.Animation.DROP
-			});
-			marker.setMap(map);           
-		}
 	}, false);
 	
 	$scope.ClickImage = function() {
@@ -69,10 +56,15 @@ angular.module('starter.controllers', [])
 
 		navigator.camera.getPicture(onSuccess, onFail, { 
 			quality: 50,
-			destinationType: Camera.DestinationType.FILE_URI 
+			destinationType: Camera.DestinationType.FILE_URL 
 		});
 
 		function onSuccess(imageURI) {
+			window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
+				img = fileEntry.nativeURL;
+				var image = document.getElementById('myImage');
+				image.src = fileEntry.nativeURL;
+  			});
 			var image = document.getElementById('myImage');
 			image.src = imageURI;
 		}
@@ -84,14 +76,14 @@ angular.module('starter.controllers', [])
 	};
 	
 	$scope.SubmitData = function($scope, $state) {
-	
-		var employee_code = document.getElementById('empid').value; //alert(employee_code);
-		var job_code = document.getElementById('jobid').value; //alert(job_code);
-		var address = 'Chandigarh'; //alert(address);
-		var device = 'android'; //alert(device);
-		var selfie_image = document.getElementById('myImage').src; //alert(selfie_image);
-		var latitude = my_current_lat; //alert(my_current_lat);
-		var longitude = my_current_lng; //alert(longitude);
+		
+		var employee_code = document.getElementById('empid').value;
+		var job_code = document.getElementById('jobid').value; 
+		var device = uuid;
+		var selfie_image = document.getElementById('myImage').src;
+		var latitude = my_current_lat;
+		var longitude = my_current_lng;
+		var notification_type = $stateParams.playlistId;
 		if(!employee_code){
 			alert("Please enter emp id.")
 				return;
@@ -100,19 +92,23 @@ angular.module('starter.controllers', [])
 			alert("Please enter job id.")
 				return;
 		}
-		
-		empdata.savedata(employee_code, job_code, latitude, longitude, address, device, selfie_image).then(function(data) { //alert("success");
-			$scope.response = data;
+		$ionicLoading.show();
+		empdata.savedata(employee_code, job_code, latitude, longitude, address, device, selfie_image, notification_type).then(function(data) {
 			
-		}).finally(function(response){ //console.log(response);
+		}).finally(function(data, $state){
+			var fileURL = img;
+			var options = new FileUploadOptions();
+			options.fileKey = "selfie_image";
+			options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+			options.mimeType = "image/jpeg";
+			options.chunkedMode = true; 
+			$cordovaFileTransfer.upload(fileURL, 'http://162.243.94.122/index.php/', options);
 			document.getElementById('empid').value = '';
 			document.getElementById('jobid').value = '';
 			document.getElementById('myImage').src = 'img/no-image.png';
-			
-		$ionicLoading.hide();
+			$ionicLoading.hide();
 			alert("Data saved successfully.");
-			$state.go('playlists')
-		});
-		
+			window.location.href = '#playlists';
+		  }, false);
 	}
-});
+}]);
