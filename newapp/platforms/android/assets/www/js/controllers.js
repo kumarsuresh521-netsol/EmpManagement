@@ -62,11 +62,7 @@ angular.module('starter.controllers', [])
 		function onSuccess(imageURI) {
 			window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
 				img = fileEntry.nativeURL;
-				var image = document.getElementById('myImage');
-				image.src = fileEntry.nativeURL;
   			});
-			var image = document.getElementById('myImage');
-			image.src = imageURI;
 		}
 		
 		function onFail(message) {
@@ -80,7 +76,7 @@ angular.module('starter.controllers', [])
 		var employee_code = document.getElementById('empid').value;
 		var job_code = document.getElementById('jobid').value; 
 		var device = uuid;
-		var selfie_image = document.getElementById('myImage').src;
+		var selfie_image = '';
 		var latitude = my_current_lat;
 		var longitude = my_current_lng;
 		var notification_type = $stateParams.playlistId;
@@ -92,21 +88,35 @@ angular.module('starter.controllers', [])
 			alert("Please enter job id.")
 				return;
 		}
+	
+			
 		$ionicLoading.show();
 		empdata.savedata(employee_code, job_code, latitude, longitude, address, device, selfie_image, notification_type).then(function(data) {
-			
-		}).finally(function(data, $state){
-			var fileURL = img;
-			var options = new FileUploadOptions();
-			options.fileKey = "selfie_image";
-			options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
-			options.mimeType = "image/jpeg";
-			options.chunkedMode = true; 
-			$cordovaFileTransfer.upload(fileURL, 'http://162.243.94.122/index.php/', options);
+			if(data.id){
+					var fileURL = img;
+					var options = {};
+					options.fileKey = "selfie_image";
+					options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+					options.mimeType = "image/jpeg";
+					options.chunkedMode = true; 
+					var params = {};
+					params.id = data.id;
+
+					options.params = params;
+					$cordovaFileTransfer.upload('http://162.243.94.122/upload.php/', fileURL, options)
+					  .then(function(result) {
+						
+					  }, function(err) { 
+						
+					  }, function (progress) {
+						
+					  });
+			}
+		}).finally(function(response, $state){
+		$ionicLoading.hide();
 			document.getElementById('empid').value = '';
 			document.getElementById('jobid').value = '';
-			document.getElementById('myImage').src = 'img/no-image.png';
-			$ionicLoading.hide();
+			
 			alert("Data saved successfully.");
 			window.location.href = '#playlists';
 		  }, false);

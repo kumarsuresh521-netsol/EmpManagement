@@ -18,7 +18,7 @@ angular.module('starter.services', [])
 		return( request.then( handleSuccess, handleError ) );
 	}
 	
-	function handleError( response ) {
+	function handleError( response ) { console.log(response);
 	   if (
 			! angular.isObject( response.data ) ||
 			! response.data.message
